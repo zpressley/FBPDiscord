@@ -4,6 +4,7 @@ import os
 import json
 
 app = Flask(__name__)
+CORS(app)  # 👈 this enables all origins by default
 
 @app.route("/")
 def home():
