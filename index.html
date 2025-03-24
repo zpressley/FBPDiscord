@@ -23,39 +23,6 @@
     const API_URL = "https://fbp-backend.onrender.com/"; // Replace this
 
     document.getElementById("tradeForm").addEventListener("submit", async function(event) {
-      event.preventDefault();
-
-      const trade = {
-        teamA: document.getElementById("teamA").value,
-        teamB: document.getElementById("teamB").value,
-        players: document.getElementById("players").value
-      };
-
-      await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(trade)
-      });
-
-      loadTrades();
-    });
-
-    async function loadTrades() {
-      const response = await fetch(API_URL);
-      const trades = await response.json();
-
-      const tradeList = document.getElementById("tradeList");
-      tradeList.innerHTML = "";
-      trades.forEach(trade => {
-        const li = document.createElement("li");
-        li.innerText = `${trade.teamA} traded with ${trade.teamB} – ${trade.players}`;
-        tradeList.appendChild(li);
-      });
-    }
-
-    loadTrades();
-    
-document.getElementById("tradeForm").addEventListener("submit", async function(event) {
   event.preventDefault();
 
   const trade = {
@@ -68,10 +35,21 @@ document.getElementById("tradeForm").addEventListener("submit", async function(e
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(trade)
+  })
+  .then(async res => {
+    const data = await res.json();
+    if (!res.ok) {
+      alert(data.error || "Something went wrong.");
+    } else {
+      alert(data.message);
+      loadTrades();
+    }
+  })
+  .catch(() => {
+    alert("Failed to connect to the server.");
   });
-
-  loadTrades();
 });
+
 
   </script>
 </body>
