@@ -31,23 +31,26 @@
     players: document.getElementById("players").value
   };
 
-  await fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(trade)
-  })
-  .then(async res => {
-    const data = await res.json();
-    if (!res.ok) {
-      alert(data.error || "Something went wrong.");
-    } else {
-      alert(data.message);
-      loadTrades();
-    }
-  })
-  .catch(() => {
-    alert("Failed to connect to the server.");
-  });
+  fetch(API_URL, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(trade)
+})
+.then(async res => {
+  const data = await res.json();
+  
+  if (!res.ok) {
+    alert(data.error || "Something went wrong.");
+  } else {
+    alert(data.message || "Trade submitted successfully!");
+    loadTrades();
+  }
+})
+.catch(err => {
+  console.error("Fetch error:", err);
+  alert("Failed to connect to the server.");
+});
+
 });
 
 
