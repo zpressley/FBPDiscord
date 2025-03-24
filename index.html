@@ -54,6 +54,25 @@
     }
 
     loadTrades();
+    
+document.getElementById("tradeForm").addEventListener("submit", async function(event) {
+  event.preventDefault();
+
+  const trade = {
+    teamA: document.getElementById("teamA").value,
+    teamB: document.getElementById("teamB").value,
+    players: document.getElementById("players").value
+  };
+
+  await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(trade)
+  });
+
+  loadTrades();
+});
+
   </script>
 </body>
 </html>
