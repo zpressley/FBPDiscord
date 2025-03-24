@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fantasy Baseball Trade Manager</title>
+</head>
+<body>
+  <h2>Submit a Trade</h2>
+  <form id="tradeForm">
+    <label>Team A:</label>
+    <input type="text" id="teamA" required><br>
+    <label>Team B:</label>
+    <input type="text" id="teamB" required><br>
+    <label>Players:</label>
+    <input type="text" id="players" required><br>
+    <button type="submit">Submit Trade</button>
+  </form>
+
+  <h2>Trade History</h2>
+  <ul id="tradeList"></ul>
+
+  <script>
+    const API_URL = "https://YOUR-RENDER-URL.onrender.com/trades"; // Replace this
+
+    document.getElementById("tradeForm").addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      const trade = {
+        teamA: document.getElementById("teamA").value,
+        teamB: document.getElementById("teamB").value,
+        players: document.getElementById("players").value
+      };
+
+      await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(trade)
+      });
+
+      loadTrades();
+    });
+
+    async function loadTrades() {
+      const response = await fetch(API_URL);
+      const trades = await response.json();
+
+      const tradeList = document.getElementById("tradeList");
+      tradeList.innerHTML = "";
+      trades.forEach(trade => {
+        const li = document.createElement("li");
+        li.innerText = `${trade.teamA} traded with ${trade.teamB} – ${trade.players}`;
+        tradeList.appendChild(li);
+      });
+    }
+
+    loadTrades();
+  </script>
+</body>
+</html>
